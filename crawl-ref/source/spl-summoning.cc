@@ -25,17 +25,17 @@
 #include "env.h"
 #include "fprop.h"
 #include "ghost.h"
-#include "godconduct.h"
-#include "goditem.h"
+#include "god-conduct.h"
+#include "god-item.h"
 #include "invent.h"
-#include "itemprop.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h"
 #include "losglobal.h"
 #include "mapmark.h"
-#include "melee_attack.h"
+#include "melee-attack.h"
 #include "message.h"
-#include "mgen_data.h"
+#include "mgen-data.h"
 #include "misc.h"
 #include "mon-abil.h"
 #include "mon-act.h"
@@ -62,7 +62,7 @@
 #include "target.h"
 #include "teleport.h"
 #include "terrain.h"
-#include "timed_effects.h"
+#include "timed-effects.h"
 #include "unwind.h"
 #include "viewchar.h"
 #include "xom.h"
@@ -1333,7 +1333,7 @@ spret_type cast_malign_gateway(actor * caster, int pow, god_type god, bool fail)
 spret_type cast_summon_horrible_things(int pow, god_type god, bool fail)
 {
     fail_check();
-    if (one_chance_in(5))
+    if (god == GOD_NO_GOD && one_chance_in(5))
     {
         // if someone deletes the db, no message is ok
         mpr(getMiscString("SHT_int_loss"));

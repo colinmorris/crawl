@@ -25,12 +25,12 @@
 #include "fight.h"
 #include "fineff.h"
 #include "ghost.h"
-#include "godabil.h" // GOZAG_GOLD_AURA_KEY
-#include "godpassive.h"
-#include "godprayer.h"
+#include "god-abil.h" // GOZAG_GOLD_AURA_KEY
+#include "god-passive.h"
+#include "god-prayer.h"
 #include "hints.h"
-#include "itemname.h"
-#include "itemprop.h"
+#include "item-name.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h"
 #include "losglobal.h"
@@ -64,7 +64,7 @@
 #include "teleport.h"
 #include "terrain.h"
 #include "throw.h"
-#include "timed_effects.h"
+#include "timed-effects.h"
 #include "traps.h"
 #include "viewchar.h"
 #include "view.h"
@@ -1153,7 +1153,7 @@ static bool _thunderbolt_tracer(monster &caster, int pow, coord_def aim)
         prev = caster.props["thunderbolt_aim"].get_coord();
     }
 
-    targetter_thunderbolt hitfunc(&caster, spell_range(SPELL_THUNDERBOLT, pow),
+    targeter_thunderbolt hitfunc(&caster, spell_range(SPELL_THUNDERBOLT, pow),
                                   prev);
     hitfunc.set_aim(aim);
 

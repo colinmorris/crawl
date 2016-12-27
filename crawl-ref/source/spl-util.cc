@@ -19,9 +19,9 @@
 #include "directn.h"
 #include "english.h"
 #include "env.h"
-#include "godpassive.h"
-#include "godabil.h"
-#include "itemprop.h"
+#include "god-passive.h"
+#include "god-abil.h"
+#include "item-prop.h"
 #include "libutil.h"
 #include "message.h"
 #include "notes.h"
@@ -724,7 +724,7 @@ void apply_area_cloud(cloud_func func, const coord_def& where,
     if (number <= 0)
         return;
 
-    targetter_cloud place(agent, GDM, number, number);
+    targeter_cloud place(agent, GDM, number, number);
     if (!place.set_aim(where))
         return;
     unsigned int dist = 0;
@@ -1392,8 +1392,7 @@ string spell_uselessness_reason(spell_type spell, bool temp, bool prevent,
 int spell_highlight_by_utility(spell_type spell, int default_colour,
                                bool transient, bool rod_spell)
 {
-    // If your god hates the spell, that
-    // overrides all other concerns
+    // If your god hates the spell, that overrides all other concerns.
     if (god_hates_spell(spell, you.religion, rod_spell)
         || is_good_god(you.religion) && you.spellcasting_unholy())
     {
@@ -1438,7 +1437,7 @@ bool spell_no_hostile_in_range(spell_type spell, bool rod)
     case SPELL_POISONOUS_CLOUD:
     case SPELL_HOLY_BREATH:
     {
-        targetter_cloud tgt(&you, range);
+        targeter_cloud tgt(&you, range);
         // Accept monsters that are in clouds for the hostiles-in-range check
         // (not for actual targeting).
         tgt.avoid_clouds = false;

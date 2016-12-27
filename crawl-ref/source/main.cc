@@ -75,30 +75,30 @@
 #include "fineff.h"
 #include "food.h"
 #include "fprop.h"
-#include "godabil.h"
-#include "godcompanions.h"
-#include "godconduct.h"
-#include "goditem.h"
-#include "godpassive.h"
-#include "godprayer.h"
+#include "god-abil.h"
+#include "god-companions.h"
+#include "god-conduct.h"
+#include "god-item.h"
+#include "god-passive.h"
+#include "god-prayer.h"
 #include "hints.h"
 #include "hiscores.h"
 #include "initfile.h"
 #include "invent.h"
-#include "itemname.h"
-#include "itemprop.h"
+#include "item-name.h"
+#include "item-prop.h"
 #include "items.h"
-#include "item_use.h"
+#include "item-use.h"
 #include "jobs.h"
 #include "libutil.h"
 #include "luaterp.h"
-#include "lookup_help.h"
+#include "lookup-help.h"
 #include "macro.h"
 #include "makeitem.h"
-#include "map_knowledge.h"
+#include "map-knowledge.h"
 #include "mapmark.h"
 #include "maps.h"
-#include "melee_attack.h"
+#include "melee-attack.h"
 #include "message.h"
 #include "misc.h"
 #include "mon-abil.h"
@@ -146,7 +146,7 @@
  #include "tiledef-dngn.h"
  #include "tilepick.h"
 #endif
-#include "timed_effects.h"
+#include "timed-effects.h"
 #include "transform.h"
 #include "traps.h"
 #include "travel.h"
@@ -2843,7 +2843,7 @@ static void _swing_at_target(coord_def move)
 
         if (!cleave_targets.empty())
         {
-            targetter_cleave hitfunc(&you, target);
+            targeter_cleave hitfunc(&you, target);
             if (stop_attack_prompt(hitfunc, "attack"))
                 return;
 

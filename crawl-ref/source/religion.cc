@@ -28,23 +28,23 @@
 #include "decks.h"
 #include "delay.h"
 #include "describe-god.h"
-#include "dgnevent.h"
+#include "dgn-event.h"
 #include "dlua.h"
 #include "english.h"
 #include "env.h"
 #include "exercise.h"
-#include "godabil.h"
-#include "godcompanions.h"
-#include "godconduct.h"
-#include "goditem.h"
-#include "godpassive.h"
-#include "godprayer.h"
-#include "godwrath.h"
+#include "god-abil.h"
+#include "god-companions.h"
+#include "god-conduct.h"
+#include "god-item.h"
+#include "god-passive.h"
+#include "god-prayer.h"
+#include "god-wrath.h"
 #include "hints.h"
 #include "hiscores.h"
 #include "invent.h"
-#include "itemname.h"
-#include "itemprop.h"
+#include "item-name.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h"
 #include "makeitem.h"
@@ -1803,10 +1803,8 @@ bool do_god_gift(bool forced)
         }
 
         case GOD_YREDELEMNUL:
-            if (!player_mutation_level(MUT_NO_LOVE)
-                && (forced
-                    || (random2(you.piety) >= piety_breakpoint(2)
-                        && one_chance_in(4))))
+            if (forced || (random2(you.piety) >= piety_breakpoint(2)
+                           && one_chance_in(4)))
             {
                 unsigned int threshold = MIN_YRED_SERVANT_THRESHOLD
                                          + you.num_current_gifts[you.religion] / 2;
@@ -3008,7 +3006,8 @@ bool player_can_join_god(god_type which_god)
         && (which_god == GOD_BEOGH
             || which_god == GOD_JIYVA
             || which_god == GOD_HEPLIAKLQANA
-            || which_god == GOD_FEDHAS))
+            || which_god == GOD_FEDHAS
+            || which_god == GOD_YREDELEMNUL))
     {
         return false;
     }

@@ -31,12 +31,12 @@
 #include "english.h"
 #include "exercise.h"
 #include "fight.h"
-#include "godabil.h"
-#include "godconduct.h"
-#include "goditem.h"
-#include "godpassive.h" // passive_t::convert_orcs
-#include "item_use.h"
-#include "itemprop.h"
+#include "god-abil.h"
+#include "god-conduct.h"
+#include "god-item.h"
+#include "god-passive.h" // passive_t::convert_orcs
+#include "item-use.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h"
 #include "losglobal.h"
@@ -52,7 +52,7 @@
 #include "nearby-danger.h"
 #include "potion.h"
 #include "prompt.h"
-#include "ranged_attack.h"
+#include "ranged-attack.h"
 #include "religion.h"
 #include "shout.h"
 #include "spl-clouds.h"
@@ -2601,7 +2601,7 @@ void bolt::affect_endpoint()
         if (cloud == CLOUD_NONE)
             return;
 
-        targetter_cloud tgt(agent(), range, get_cloud_size(true),
+        targeter_cloud tgt(agent(), range, get_cloud_size(true),
                             get_cloud_size(false, true));
         tgt.set_aim(pos());
         for (const auto &entry : tgt.seen)
@@ -3525,7 +3525,7 @@ void bolt::affect_player_enchantment(bool resistible)
         break;
 
     case BEAM_HEALING:
-        potionlike_effect(POT_HEAL_WOUNDS, ench_power, true, evoked);
+        potionlike_effect(POT_HEAL_WOUNDS, ench_power, true);
         obvious_effect = true;
         nasty = false;
         nice  = true;
@@ -5074,7 +5074,7 @@ bool bolt::ignores_monster(const monster* mon) const
     if (flavour == BEAM_DIGGING)
         return true;
 
-    // The targetters might call us with nullptr in the event of a remembered
+    // The targeters might call us with nullptr in the event of a remembered
     // monster that is no longer there. Treat it as opaque.
     if (!mon)
         return false;

@@ -17,7 +17,7 @@
 #include "env.h"
 #include "fprop.h"
 #include "fight.h"
-#include "godconduct.h"
+#include "god-conduct.h"
 #include "items.h"
 #include "losglobal.h"
 #include "message.h"
@@ -340,7 +340,7 @@ spret_type cast_cloud_cone(const actor *caster, int pow, const coord_def &pos,
 
     const int range = spell_range(SPELL_CLOUD_CONE, pow);
 
-    targetter_shotgun hitfunc(caster, CLOUD_CONE_BEAM_COUNT, range);
+    targeter_shotgun hitfunc(caster, CLOUD_CONE_BEAM_COUNT, range);
 
     hitfunc.set_aim(pos);
 

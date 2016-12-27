@@ -21,13 +21,13 @@
 #include "describe.h"
 #include "env.h"
 #include "food.h"
-#include "goditem.h"
-#include "godpassive.h"
+#include "god-item.h"
+#include "god-passive.h"
 #include "initfile.h"
-#include "itemprop.h"
+#include "item-prop.h"
 #include "items.h"
-#include "item_use.h"
-#include "itemprop.h"
+#include "item-use.h"
+#include "item-prop.h"
 #include "libutil.h"
 #include "macro.h"
 #include "message.h"
@@ -1680,7 +1680,7 @@ bool check_warning_inscriptions(const item_def& item,
 
         if (oper == OPER_WIELD)
         {
-            // Can't use can_wield in item_use.cc because it wants
+            // Can't use can_wield in item-use.cc because it wants
             // a non-const item_def.
             if (!you.can_wield(item))
                 return true;

@@ -27,9 +27,9 @@
 #include "fight.h"
 #include "food.h"          // For evokes
 #include "ghost.h"         // For is_dragonkind ghost_demon datas
-#include "godconduct.h"    // did_god_conduct
-#include "godpassive.h"    // passive_t::want_curses
-#include "mgen_data.h"     // For Sceptre of Asmodeus evoke
+#include "god-conduct.h"    // did_god_conduct
+#include "god-passive.h"    // passive_t::want_curses
+#include "mgen-data.h"     // For Sceptre of Asmodeus evoke
 #include "mon-death.h"     // For demon axe's SAME_ATTITUDE
 #include "mon-place.h"     // For Sceptre of Asmodeus evoke
 #include "player.h"
@@ -1335,15 +1335,12 @@ static void _VINES_unequip(item_def *item, bool *show_msgs)
 
 static void _KRYIAS_equip(item_def *item, bool *show_msgs, bool unmeld)
 {
-    if (you.species == SP_DEEP_DWARF)
-        _equip_mpr(show_msgs, "You feel no connection to the armour.");
-    else
-        _equip_mpr(show_msgs, "Your attunement to healing devices increases!");
+    _equip_mpr(show_msgs, "Your attunement to healing potions increases.");
 }
 
 static void _KRYIAS_unequip(item_def *item, bool *show_msgs)
 {
-        _equip_mpr(show_msgs, "Your attunement to healing devices decreases.");
+    _equip_mpr(show_msgs, "Your attunement to healing potions decreases.");
 }
 
 ///////////////////////////////////////////////////

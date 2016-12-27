@@ -25,13 +25,13 @@
 #include "exercise.h"
 #include "food.h"
 #include "format.h"
-#include "godabil.h"
-#include "godconduct.h"
-#include "goditem.h"
-#include "godpassive.h" // passive_t::shadow_spells
-#include "godwrath.h"
+#include "god-abil.h"
+#include "god-conduct.h"
+#include "god-item.h"
+#include "god-passive.h" // passive_t::shadow_spells
+#include "god-wrath.h"
 #include "hints.h"
-#include "item_use.h"
+#include "item-use.h"
 #include "libutil.h"
 #include "macro.h"
 #include "menu.h"
@@ -799,7 +799,7 @@ bool cast_a_spell(bool check_range, spell_type spell)
 
         if ((Options.use_animations & UA_RANGE) && Options.darken_beyond_range)
         {
-            targetter_smite range(&you, calc_spell_range(spell), 0, 0, true);
+            targeter_smite range(&you, calc_spell_range(spell), 0, 0, true);
             range_view_annotator show_range(&range);
             delay(50);
         }
@@ -975,11 +975,13 @@ static void _spellcasting_side_effects(spell_type spell, god_type god,
         // Make some noise if it's actually the player casting.
         noisy(spell_noise(spell), you.pos());
 
-        if (real_spell
-            && player_equip_unrand(UNRAND_MAJIN)
-            && one_chance_in(500))
+        if (real_spell && player_equip_unrand(UNRAND_MAJIN))
         {
-            _majin_speak(spell);
+            // never kill the player (directly)
+            int hp_cost = min(spell_mana(spell), you.hp - 1);
+            ouch(hp_cost, KILLED_BY_SOMETHING, MID_NOBODY, "the Majin-Bo");
+            if (one_chance_in(500))
+                _majin_speak(spell);
         }
     }
 
@@ -1133,60 +1135,60 @@ static bool _spellcasting_aborted(spell_type spell,
     return false;
 }
 
-static unique_ptr<targetter> _spell_targetter(spell_type spell, int pow,
+static unique_ptr<targeter> _spell_targeter(spell_type spell, int pow,
                                               int range)
 {
     switch (spell)
     {
     case SPELL_FIREBALL:
-        return make_unique<targetter_beam>(&you, range, ZAP_FIREBALL, pow,
+        return make_unique<targeter_beam>(&you, range, ZAP_FIREBALL, pow,
                                            1, 1);
     case SPELL_HURL_DAMNATION:
-        return make_unique<targetter_beam>(&you, range, ZAP_DAMNATION, pow,
+        return make_unique<targeter_beam>(&you, range, ZAP_DAMNATION, pow,
                                            1, 1);
     case SPELL_MEPHITIC_CLOUD:
-        return make_unique<targetter_beam>(&you, range, ZAP_MEPHITIC, pow,
+        return make_unique<targeter_beam>(&you, range, ZAP_MEPHITIC, pow,
                                            pow >= 100 ? 1 : 0, 1);
     case SPELL_ISKENDERUNS_MYSTIC_BLAST:
-        return make_unique<targetter_imb>(&you, pow, range);
+        return make_unique<targeter_imb>(&you, pow, range);
     case SPELL_FIRE_STORM:
-        return make_unique<targetter_smite>(&you, range, 2, pow > 76 ? 3 : 2);
+        return make_unique<targeter_smite>(&you, range, 2, pow > 76 ? 3 : 2);
     case SPELL_FREEZING_CLOUD:
     case SPELL_POISONOUS_CLOUD:
     case SPELL_HOLY_BREATH:
-        return make_unique<targetter_cloud>(&you, range);
+        return make_unique<targeter_cloud>(&you, range);
     case SPELL_THUNDERBOLT:
-        return make_unique<targetter_thunderbolt>(&you, range,
+        return make_unique<targeter_thunderbolt>(&you, range,
             (you.props.exists("thunderbolt_last")
              && you.props["thunderbolt_last"].get_int() + 1 == you.num_turns) ?
                 you.props["thunderbolt_aim"].get_coord() : coord_def());
     case SPELL_LRD:
-        return make_unique<targetter_fragment>(&you, pow, range);
+        return make_unique<targeter_fragment>(&you, pow, range);
     case SPELL_FULMINANT_PRISM:
-        return make_unique<targetter_smite>(&you, range, 0, 2);
+        return make_unique<targeter_smite>(&you, range, 0, 2);
     case SPELL_DAZZLING_SPRAY:
-        return make_unique<targetter_spray>(&you, range, ZAP_DAZZLING_SPRAY);
+        return make_unique<targeter_spray>(&you, range, ZAP_DAZZLING_SPRAY);
     case SPELL_EXPLOSIVE_BOLT:
-        return make_unique<targetter_explosive_bolt>(&you, pow, range);
+        return make_unique<targeter_explosive_bolt>(&you, pow, range);
     case SPELL_GLACIATE:
-        return make_unique<targetter_cone>(&you, range);
+        return make_unique<targeter_cone>(&you, range);
     case SPELL_CLOUD_CONE:
-        return make_unique<targetter_shotgun>(&you, CLOUD_CONE_BEAM_COUNT,
+        return make_unique<targeter_shotgun>(&you, CLOUD_CONE_BEAM_COUNT,
                                               range);
     case SPELL_SCATTERSHOT:
-        return make_unique<targetter_shotgun>(&you, shotgun_beam_count(pow),
+        return make_unique<targeter_shotgun>(&you, shotgun_beam_count(pow),
                                               range);
     case SPELL_GRAVITAS:
-        return make_unique<targetter_smite>(&you, range,
+        return make_unique<targeter_smite>(&you, range,
                                             gravitas_range(pow, 2),
                                             gravitas_range(pow));
     case SPELL_VIOLENT_UNRAVELLING:
-        return make_unique<targetter_unravelling>(&you, range, pow);
+        return make_unique<targeter_unravelling>(&you, range, pow);
     case SPELL_RANDOM_BOLT:
-        return make_unique<targetter_beam>(&you, range, ZAP_CRYSTAL_BOLT, pow,
+        return make_unique<targeter_beam>(&you, range, ZAP_CRYSTAL_BOLT, pow,
                                            0, 0);
     case SPELL_INFESTATION:
-        return make_unique<targetter_smite>(&you, range, 2, 2, false,
+        return make_unique<targeter_smite>(&you, range, 2, 2, false,
                                             [](const coord_def& p) -> bool {
                                                 return you.pos() != p; });
 
@@ -1195,7 +1197,7 @@ static unique_ptr<targetter> _spell_targetter(spell_type spell, int pow,
     }
 
     if (spell_to_zap(spell) != NUM_ZAPS)
-        return make_unique<targetter_beam>(&you, range, spell_to_zap(spell), pow, 0, 0);
+        return make_unique<targeter_beam>(&you, range, spell_to_zap(spell), pow, 0, 0);
 
     return nullptr;
 }
@@ -1208,23 +1210,6 @@ static double _chance_miscast_prot()
         miscast_prot = (double) you.piety/piety_breakpoint(5);
 
     return min(1.0, miscast_prot);
-}
-
-/**
- * Handles damage from corrupted magic effects.
- *
- * Currently only from the Majin-Bo.
- *
- * @param spell         The type of spell that was just cast.
- **/
-static void _spellcasting_corruption(spell_type spell)
-{
-    // never kill the player (directly)
-    int hp_cost = min(you.spell_hp_cost() * spell_mana(spell), you.hp - 1);
-    const char * source = nullptr;
-    if (player_equip_unrand(UNRAND_MAJIN))
-        source = "the Majin-Bo"; // for debugging
-    ouch(hp_cost, KILLED_BY_SOMETHING, MID_NOBODY, source);
 }
 
 // Returns the nth triangular number.
@@ -1262,7 +1247,7 @@ int hex_success_chance(const int mr, int powc, int scale, bool round_up)
 
 // Include success chance in targeter for spells checking monster MR.
 vector<string> desc_success_chance(const monster_info& mi, int pow, bool evoked,
-                                   targetter* hitfunc)
+                                   targeter* hitfunc)
 {
     vector<string> descs;
     const int mr = mi.res_magic();
@@ -1352,7 +1337,7 @@ spret_type your_spells(spell_type spell, int powc,
 
         const int range = calc_spell_range(spell, powc);
 
-        unique_ptr<targetter> hitfunc = _spell_targetter(spell, powc, range);
+        unique_ptr<targeter> hitfunc = _spell_targeter(spell, powc, range);
 
         // Add success chance to targeted spells checking monster MR
         const bool mr_check = testbits(flags, SPFLAG_MR_CHECK)
@@ -1494,9 +1479,6 @@ spret_type your_spells(spell_type spell, int powc,
 
     spret_type cast_result = _do_cast(spell, powc, spd, beam, god,
                                       potion, fail);
-
-    if (cast_result != SPRET_ABORT && you.spell_hp_cost() && allow_fail)
-        _spellcasting_corruption(spell);
 
     switch (cast_result)
     {

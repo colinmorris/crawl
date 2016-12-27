@@ -22,10 +22,10 @@
 #include "directn.h"
 #include "env.h"
 #include "feature.h"
-#include "godpassive.h"
+#include "god-passive.h"
 #include "hints.h"
 #include "invent.h"
-#include "itemprop.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h" // map_find
 #include "menu.h"

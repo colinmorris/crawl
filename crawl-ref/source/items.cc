@@ -34,21 +34,21 @@
 #include "defines.h"
 #include "delay.h"
 #include "describe.h"
-#include "dgnevent.h"
+#include "dgn-event.h"
 #include "directn.h"
 #include "dungeon.h"
 #include "env.h"
 #include "food.h"
-#include "godpassive.h"
-#include "godprayer.h"
-#include "godwrath.h"
+#include "god-passive.h"
+#include "god-prayer.h"
+#include "god-wrath.h"
 #include "hints.h"
 #include "hints.h"
 #include "hiscores.h"
 #include "invent.h"
-#include "itemname.h"
-#include "itemprop.h"
-#include "item_use.h"
+#include "item-name.h"
+#include "item-prop.h"
+#include "item-use.h"
 #include "libutil.h"
 #include "macro.h"
 #include "makeitem.h"
@@ -3428,7 +3428,7 @@ colour_t item_def::missile_colour() const
 {
     ASSERT(base_type == OBJ_MISSILES);
 
-    // TODO: move this into itemprop.cc
+    // TODO: move this into item-prop.cc
     switch (sub_type)
     {
         case MI_STONE:
@@ -3473,7 +3473,7 @@ colour_t item_def::armour_colour() const
         return mons_class_colour(monster_for_hide((armour_type)sub_type));
 
 
-    // TODO: move (some of?) this into itemprop.cc
+    // TODO: move (some of?) this into item-prop.cc
     switch (sub_type)
     {
         case ARM_CLOAK:

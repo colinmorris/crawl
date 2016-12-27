@@ -14,8 +14,8 @@
 #include "files.h"
 #include "food.h"
 #include "ghost.h"
-#include "itemname.h"
-#include "itemprop.h"
+#include "item-name.h"
+#include "item-prop.h"
 #include "libutil.h"
 #include "mon-death.h"
 #include "mon-tentacle.h"
@@ -42,7 +42,7 @@
 COMPILE_CHECK(TILE_DNGN_UNSEEN == 0);
 
 // NOTE: If one of the following asserts fail, it's because the corresponding
-// enum in itemprop-enum.h was modified, but rltiles/dc-item.txt was not
+// enum in item-prop-enum.h was modified, but rltiles/dc-item.txt was not
 // modified in parallel.
 
 // These brands start with "normal" which there's no tile for, so subtract 1.
@@ -2826,7 +2826,7 @@ tileidx_t tileidx_bolt(const bolt &bolt)
         break;
 
     case BROWN:
-        if (bolt.name == "rocky blast")
+        if (bolt.name == "blast of sand")
             return TILE_BOLT_SANDBLAST;
         break;
 

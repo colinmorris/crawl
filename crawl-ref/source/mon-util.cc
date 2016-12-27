@@ -31,16 +31,16 @@
 #include "food.h"
 #include "fprop.h"
 #include "ghost.h"
-#include "godabil.h"
-#include "goditem.h"
-#include "godpassive.h"
-#include "itemname.h"
-#include "itemprop.h"
+#include "god-abil.h"
+#include "god-item.h"
+#include "god-passive.h"
+#include "item-name.h"
+#include "item-prop.h"
 #include "items.h"
 #include "libutil.h"
 #include "mapmark.h"
 #include "message.h"
-#include "mgen_data.h"
+#include "mgen-data.h"
 #include "misc.h"
 #include "mon-abil.h"
 #include "mon-behv.h"
@@ -64,7 +64,7 @@
 #include "tiledef-player.h"
 #include "tilepick.h"
 #include "tileview.h"
-#include "timed_effects.h"
+#include "timed-effects.h"
 #include "traps.h"
 #include "unicode.h"
 #include "unwind.h"
@@ -5259,10 +5259,7 @@ bool mons_is_player_shadow(const monster& mon)
 bool mons_has_attacks(const monster& mon)
 {
     const mon_attack_def attk = mons_attack_spec(mon, 0);
-    if (attk.type == AT_NONE || attk.damage == 0)
-        return false;
-
-    return true;
+    return attk.type != AT_NONE && attk.damage > 0;
 }
 
 // The default suitable() function for choose_random_nearby_monster().
