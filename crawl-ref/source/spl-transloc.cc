@@ -318,16 +318,16 @@ static coord_def _fuzz_hop_destination(coord_def target)
  */
 spret_type frog_hop(bool fail)
 {
-    static const int HOP_RANGE = LOS_RADIUS - HOP_FUZZ_RADIUS;
+    const int hop_range = 3 + player_mutation_level(MUT_HOP); // 4-5
     coord_def target;
-    targetter_smite tgt(&you, HOP_RANGE, 0, HOP_FUZZ_RADIUS);
+    targetter_smite tgt(&you, hop_range, 0, HOP_FUZZ_RADIUS);
     while (true)
     {
         if (!_find_cblink_target(target, true, "hop", &tgt))
             return SPRET_ABORT;
-        if (grid_distance(you.pos(), target) > HOP_RANGE)
+        if (grid_distance(you.pos(), target) > hop_range)
         {
-            mpr("That's out of range!");
+            mpr("That's out of range!"); // ! targeting
             continue;
         }
         break;
