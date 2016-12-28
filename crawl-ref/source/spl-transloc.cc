@@ -156,7 +156,7 @@ void uncontrolled_blink(bool override_stasis)
  * @return              True if a target was found; false if the player aborted.
  */
 static bool _find_cblink_target(coord_def &target, bool safe_cancel,
-                                string verb, targetter *hitfunc = nullptr)
+                                string verb, targeter *hitfunc = nullptr)
 {
     while (true)
     {
@@ -320,7 +320,7 @@ spret_type frog_hop(bool fail)
 {
     const int hop_range = 3 + player_mutation_level(MUT_HOP); // 4-5
     coord_def target;
-    targetter_smite tgt(&you, hop_range, 0, HOP_FUZZ_RADIUS);
+    targeter_smite tgt(&you, hop_range, 0, HOP_FUZZ_RADIUS);
     while (true)
     {
         if (!_find_cblink_target(target, true, "hop", &tgt))
