@@ -964,6 +964,14 @@ static void _spellcasting_side_effects(spell_type spell, god_type god,
 
     if (god == GOD_NO_GOD)
     {
+        // Casting pain costs 1 hp.
+        // Deep Dwarves' damage reduction always blocks at least 1 hp.
+        if (spell == SPELL_PAIN
+            && (you.species != SP_DEEP_DWARF && !player_res_torment()))
+        {
+            dec_hp(1, false);
+        }
+
         if (you.duration[DUR_SAP_MAGIC]
             && you.props[SAP_MAGIC_KEY].get_int() < 3
             && real_spell && coinflip())
@@ -1055,10 +1063,8 @@ static void _maybe_cancel_repeat(spell_type spell)
     }
 }
 
-static spret_type _do_cast(spell_type spell, int powc,
-                           const dist& spd, bolt& beam,
-                           god_type god, int potion,
-                           bool fail);
+static spret_type _do_cast(spell_type spell, int powc, const dist& spd,
+                           bolt& beam, god_type god, bool fail);
 
 /**
  * Should this spell be aborted before casting properly starts, either because
@@ -1303,8 +1309,6 @@ spret_type your_spells(spell_type spell, int powc,
 
     ASSERT(wiz_cast || !(flags & SPFLAG_TESTING));
 
-    int potion = -1;
-
     if (!powc)
         powc = calc_spell_power(spell, true);
 
@@ -1477,8 +1481,7 @@ spret_type your_spells(spell_type spell, int powc,
 
     const bool old_target = actor_at(beam.target);
 
-    spret_type cast_result = _do_cast(spell, powc, spd, beam, god,
-                                      potion, fail);
+    spret_type cast_result = _do_cast(spell, powc, spd, beam, god, fail);
 
     switch (cast_result)
     {
@@ -1563,31 +1566,10 @@ spret_type your_spells(spell_type spell, int powc,
     return SPRET_SUCCESS;
 }
 
-/**
- * Handles special-cased aftereffects of spellcasting.
- *
- * Currently handles damage from casting Pain, since that occurs before the
- * spellcast, whether or not it's successful, as long as it's not aborted.
- *
- * @param spell         The type of spell that was just cast.
- **/
-static void _spell_zap_effect(spell_type spell)
-{
-    // Casting pain costs 1 hp.
-    // Deep Dwarves' damage reduction always blocks at least 1 hp.
-    if (spell == SPELL_PAIN
-        && (you.species != SP_DEEP_DWARF && !player_res_torment()))
-    {
-        dec_hp(1, false);
-    }
-}
-
 // Returns SPRET_SUCCESS, SPRET_ABORT, SPRET_FAIL
 // or SPRET_NONE (not a player spell).
-static spret_type _do_cast(spell_type spell, int powc,
-                           const dist& spd, bolt& beam,
-                           god_type god, int potion,
-                           bool fail)
+static spret_type _do_cast(spell_type spell, int powc, const dist& spd,
+                           bolt& beam, god_type god, bool fail)
 {
     const coord_def target = spd.isTarget ? beam.target : you.pos() + spd.delta;
     if (spell == SPELL_FREEZE || spell == SPELL_VAMPIRIC_DRAINING)
@@ -1946,13 +1928,8 @@ static spret_type _do_cast(spell_type spell, int powc,
     zap_type zap = spell_to_zap(spell);
     if (zap != NUM_ZAPS)
     {
-        spret_type ret = zapping(zap, spell_zap_power(spell, powc), beam, true,
-                                 nullptr, fail);
-
-        if (ret == SPRET_SUCCESS)
-            _spell_zap_effect(spell);
-
-        return ret;
+        return zapping(zap, spell_zap_power(spell, powc), beam, true, nullptr,
+                       fail);
     }
 
     return SPRET_NONE;
